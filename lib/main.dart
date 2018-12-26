@@ -14,12 +14,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('text'),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[],
-        ),
+        centerTitle: true,
+        title: Text("ola"),
       ),
     );
   }

@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
           "https://api.giphy.com/v1/gifs/trending?api_key=GeAUobdXzADy3PdBIQCkiWYhUjBdguhl&limit=25&rating=G");
     } else {
       response = await http.get(
-          "https://api.giphy.com/v1/gifs/search?api_key=GeAUobdXzADy3PdBIQCkiWYhUjBdguhl&q=&limit=25&offset=0&rating=G&lang=en");
+          "https://api.giphy.com/v1/gifs/search?api_key=GeAUobdXzADy3PdBIQCkiWYhUjBdguhl&q=$_search&limit=20&offset=$_offSet&rating=G&lang=en");
     }
     return json.decode(response.body);
   }
@@ -60,22 +60,24 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: FutureBuilder(
-            future: _getGifs(),
-            builder: (context, snapshot){
-              switch(snapshot.connectionState){
-                case ConnectionState.waiting:
-                case ConnectionState.none:
-                return Container(
-                  width: 200,
-                  height: 200,
-                  alignment: Alignment.center,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    strokeWidth: 5,
-                  ),
-                  );
-                  default:
-                  if (snapshot.hasData)return Container(); 
+                future: _getGifs(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                    case ConnectionState.none:
+                      return Container(
+                        width: 200,
+                        height: 200,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 5,
+                        ),
+                      );
+                    default:
+                      if (snapshot.hasData) return Container();
+                      else _creatGifTable(context, snapshot)
                 }
               }
             ),
@@ -85,12 +87,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-int _getCount(List data){
-  if(_search == null){
-    return data.length;
-  }else{
-    return data.length + 1;
+  Widget _creatGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    return GridView(
+        padding: EdgeInsets.all(10),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10
+            ),
+        itemCount: 4,
+        itemBuilder: null
+    );
   }
-}
 }
